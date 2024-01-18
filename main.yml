@@ -1,0 +1,52 @@
+---
+- name: Clusters_Info playbook
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: get dns info from cluster
+    uri:
+      url: "{{ nutanix_url }}/cluster/name_servers"
+      user: "{{ vault_pe_username }}"
+      password: "{{ vault_pe_password }}"
+      method: GET
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+      headers:
+        Content-Type: application/json 
+      return_content: yes
+    register: cluster_dns
+
+  - name: add DNS
+    uri:
+      url: "{{ nutanix_url }}/cluster/name_servers"
+      user: "{{ vault_pe_username }}"
+      password: "{{ vault_pe_password }}"
+      method: POST
+      body: "{{ lookup('file', 'templates/add_dns.json') }}"
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+      status_code: 200, 201
+      headers:
+        Content-Type: application/json
+      return_content: yes
+    register: cluster_dns
+
+  - name: add ntp 
+    uri:
+      url: "{{ nutanix_url }}/cluster/ntp_servers"
+      user: "{{ vault_pe_username }}"
+      password: "{{ vault_pe_password }}"
+      method: POST
+      body: "{{ lookup('file', 'templates/add_ntp.json') }}"
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+      status_code: 200, 201
+      headers:
+        Content-Type: application/json
+      return_content: yes
+    register: cluster_ntp
+

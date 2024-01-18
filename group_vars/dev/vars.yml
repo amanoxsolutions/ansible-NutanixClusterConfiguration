@@ -1,0 +1,4 @@
+---
+# public data
+pe_ip: 10.10.88.50
+nutanix_url: https://10.10.88.50:9440/PrismGateway/services/rest/v2.0
