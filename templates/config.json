@@ -1,0 +1,12 @@
+{
+  "dns": {
+    "value": "8.8.8.8"
+  },
+  "ntp": {
+    "value": "8.8.8.8"
+  },
+  "smtp": {
+    "server": "smtp.example.com",
+    "port": 587
+  }
+}
