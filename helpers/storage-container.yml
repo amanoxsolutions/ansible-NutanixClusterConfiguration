@@ -1,0 +1,74 @@
+---
+- name: Clusters_Info playbook
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: Read configuration
+    set_fact:
+        config: "{{ lookup('file', 'templates/config.json') }}"
+
+  - name: get storage container
+    uri:
+      url: "{{ nutanix_url }}/storage_containers"
+      user: "{{ vault_pe_username }}"
+      password: "{{ vault_pe_password }}"
+      method: GET
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+      headers:
+        Content-Type: application/json
+      return_content: yes
+    register: cluster_storage_containers
+
+  - name: Print storage container values
+    debug:
+        msg: "storage_container_uuid={{ item.storage_container_uuid }} vstore_name_list={{ item.vstore_name_list }}"
+    loop: "{{ cluster_storage_containers.json.entities }}"
+    loop_control:
+        label: "{{ item.vstore_name_list }}"
+    register: vstore_name_list_result
+
+  - name: Display combined vstore_name_list and storage_container_uuid
+    debug:
+        var: vstore_name_list_result.results | map(attribute='msg') | list
+
+  - name: Print storage container values for default vstores
+    debug:
+        msg: "storage_container_uuid={{ item.storage_container_uuid }} vstore_name_list={{ item.vstore_name_list }}"
+    loop: "{{ cluster_storage_containers.json.entities | selectattr('vstore_name_list.0', 'match', '^default.*') | list }}"
+    loop_control:
+        label: "{{ item.vstore_name_list }}"
+    register: vstore_name_list_result
+
+  - name: Store UUIDs for storage containers with vstore_name_list starting with 'default'
+    set_fact:
+        default_storage_container_uuids: "{{ cluster_storage_containers.json.entities | selectattr('vstore_name_list.0', 'match', '^default.*') | map(attribute='storage_container_uuid') | first }}"
+
+  - name: delete default storage container
+    uri:
+      url: "{{ nutanix_url }}/storage_containers/{{ default_storage_container_uuids }}?ignore_small_files=true"
+      user: "{{ vault_pe_username }}"
+      password: "{{ vault_pe_password }}"
+      method: DELETE
+      force_basic_auth: yes
+      validate_certs: no
+      status_code: 200, 201, 204
+    register: delete_storage_container
+	
+  - name: create Storage Container
+    uri:
+        url: "{{ nutanix_url }}/storage_containers"
+        user: "{{ vault_pe_username }}"
+        password: "{{ vault_pe_password }}"
+        method: POST
+        body: "{{ config.storagecontainer }}"
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+        status_code: 200, 201
+        headers:
+                Content-Type: application/json
+        return_content: yes
+    register: storage_container

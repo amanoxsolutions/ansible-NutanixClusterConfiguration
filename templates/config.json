@@ -5,6 +5,9 @@
   "ntp": {
     "value": "8.8.8.8"
   },
+  "storagecontainer": {
+	  "name": "test-ansible"
+  },
   "smtp": {
     "server": "smtp.example.com",
     "port": 587
