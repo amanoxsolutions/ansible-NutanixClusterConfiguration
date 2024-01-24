@@ -29,6 +29,15 @@
 		"password": null,
 		"secure_mode": "NONE",
 		"from_email_address": "ruag@test.ch"
+	},
+	"alert": {
+		"enable": true,
+		"enable_email_digest": false,
+		"enable_default_nutanix_email": false,
+		"default_nutanix_email": "nos-alerts@nutanix.com",
+		"email_contact_list": [
+			"nutanixsupport@amanox.ch"
+		]
 	}
 }
 

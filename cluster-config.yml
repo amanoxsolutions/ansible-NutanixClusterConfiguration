@@ -125,3 +125,19 @@
                 Content-Type: application/json
         return_content: yes
     register: add_smtp
+
+  - name: add alert configuration
+    uri:
+        url: "{{ nutanix_url }}/alerts/configuration"
+        user: "{{ vault_pe_username }}"
+        password: "{{ vault_pe_password }}"
+        method: PUT
+        body: "{{ config.alert }}"
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+        status_code: 200, 201
+        headers:
+                Content-Type: application/json
+        return_content: yes
+    register: add_alert_configuration
