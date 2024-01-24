@@ -1,0 +1,24 @@
+---
+- name: Clusters_Info playbook
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: Read configuration
+    set_fact:
+        config: "{{ lookup('file', 'templates/config.json') }}"
+
+  - name: add SMTP
+    uri:
+        url: "{{ nutanix_url }}/cluster/smtp"
+        user: "{{ vault_pe_username }}"
+        password: "{{ vault_pe_password }}"
+        method: PATCH 
+        body: "{{ config.smtp }}"
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+        status_code: 200, 201
+        headers:
+                Content-Type: application/json
+        return_content: yes
