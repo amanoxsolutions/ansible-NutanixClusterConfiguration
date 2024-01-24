@@ -8,6 +8,20 @@
   "storagecontainer": {
 	  "name": "test-ansible"
   },
+  "networkconfigurations": [
+	  {
+		  "name": "test-ruag-vlan",
+		  "vlan_id": "2102"
+	  },
+	  {
+		  "name": "test-ruag-loop",
+                  "vlan_id": "2103"
+	  },
+	  {
+                  "name": "test-ruag-lastloop",
+                  "vlan_id": "2104"
+          }
+  ],
   "smtp": {
     "server": "smtp.example.com",
     "port": 587
