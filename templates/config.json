@@ -38,6 +38,17 @@
 		"email_contact_list": [
 			"nutanixsupport@amanox.ch"
 		]
+	},
+	"ha": {
+		"failover_enabled": true,
+		"num_host_failures_to_tolerate": 1,
+		"reservation_type": "ReserveSegments",
+		"ha_state": "HighlyAvailable"
+	},
+	"dataservice": {
+		"cluster_external_data_services_ipaddress": "10.10.88.59"
 	}
+	
+
 }
 
