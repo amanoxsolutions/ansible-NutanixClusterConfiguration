@@ -6,19 +6,19 @@
 		"value": "8.8.8.8"
 	},
 	"storagecontainer": {
-		"name": "test-ansible"
+		"name": "ctr01"
 	},
 	"networkconfigurations": [
 		{
-			"name": "test-ruag-vlan",
+			"name": "VLAN2102",
 			"vlan_id": "2102"
 		},
 		{
-			"name": "test-ruag-loop",
+			"name": "VLAN2103",
 			"vlan_id": "2103"
 		},
 		{
-			"name": "test-ruag-lastloop",
+			"name": "VLAN2104",
 			"vlan_id": "2104"
 		}
 	],
@@ -28,7 +28,7 @@
 		"username": null,
 		"password": null,
 		"secure_mode": "NONE",
-		"from_email_address": "ruag@test.ch"
+		"from_email_address": "test@test.ch"
 	},
 	"alert": {
 		"enable": true,
@@ -46,9 +46,14 @@
 		"ha_state": "HighlyAvailable"
 	},
 	"dataservice": {
-		"cluster_external_data_services_ipaddress": "10.10.88.59"
-	}
-	
-
+		"cluster_external_data_services_address": {
+			"ipv4": "1.1.1.1"
+		},
+		"cluster_external_address": [
+			{
+				"ipv4": "1.1.1.2"
+			}
+		]
+	},
 }
 

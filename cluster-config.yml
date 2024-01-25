@@ -141,3 +141,73 @@
                 Content-Type: application/json
         return_content: yes
     register: add_alert_configuration
+
+  - name: add data services IP
+    uri:
+        url: "{{ nutanix_url }}/cluster"
+        user: "{{ vault_pe_username }}"
+        password: "{{ vault_pe_password }}"
+        method: PATCH
+        body: "{{ config.dataservice }}"
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+        status_code: 200, 201
+        headers:
+                Content-Type: application/json
+        return_content: yes
+    register: add_data_services_ip
+
+  - name: get storage pools
+    uri:
+      url: "{{ nutanix_urlv1 }}/storage_pools"
+      user: "{{ vault_pe_username }}"
+      password: "{{ vault_pe_password }}"
+      method: GET
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+      headers:
+        Content-Type: application/json
+      return_content: yes
+    register: cluster_storage_pools
+
+  - name: Store Storage pool UUID
+    set_fact:
+            default_storage_pool_uuid: "{{ cluster_storage_pools.json.entities[0].storagePoolUuid }}"
+        
+  - name: Print storage pool
+    debug:
+            msg: "{{ default_storage_pool_uuid }}"
+
+  - name: update Storage Pool
+    uri:
+        url: "{{ nutanix_urlv1 }}/storage_pools"
+        user: "{{ vault_pe_username }}"
+        password: "{{ vault_pe_password }}"
+        method: PATCH
+        body: '{"storagePoolUuid": "{{ default_storage_pool_uuid }}", "name": "sp01"}'
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+        status_code: 200, 201
+        headers:
+                Content-Type: application/json
+        return_content: yes
+    register: storage_pool
+
+  - name: configure HA
+    uri:
+        url: "{{ nutanix_url }}/ha"
+        user: "{{ vault_pe_username }}"
+        password: "{{ vault_pe_password }}"
+        method: PUT
+        body: "{{ config.ha }}"
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+        status_code: 200, 201
+        headers:
+                Content-Type: application/json
+        return_content: yes
+    register: configure_ha
