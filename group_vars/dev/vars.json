@@ -1,0 +1,47 @@
+{
+    "hyp": {
+      "node1": "10.112.2.41",
+      "node2": "10.112.2.42",
+      "node3": "10.112.2.43",
+      "gateway": "10.112.2.1",
+      "netmask": "255.255.255.0"
+    },
+    "cvm": {
+      "node1": "10.112.2.61",
+      "node2": "10.112.2.62",
+      "node3": "10.112.2.63",
+      "gateway": "10.112.2.1",
+      "netmask": "255.255.255.0"
+    },
+    "ipmi": {
+      "node1": "10.112.3.41",
+      "node2": "10.112.3.42",
+      "node3": "10.112.3.43",
+      "gateway": "10.112.3.1",
+      "netmask": "255.255.255.0"
+    },
+    "foundation": {
+      "ip": "10.112.3.40"
+    },
+    "block": {
+      "serial1": "23SG5J300052",
+      "serial2": "23SG5J300053",
+      "serial3": "23SG5J300055"
+    },
+    "node": {
+      "serial1": "HM234S003375",
+      "serial2": "HM234S003376",
+      "serial3": "HM234S003235"
+    },
+    "mac": {
+      "node1": "7C:C2:55:81:61:D6",
+      "node2": "7C:C2:55:81:61:D5",
+      "node3": "7C:C2:55:81:62:62"
+    },
+    "pe_ip": "10.10.88.50",
+    "nutanix_url": "https://10.10.88.50:9440/PrismGateway/services/rest/v2.0",
+    "vault_pe_user": "api_user",
+    "ipmi_user": "ADMIN",
+    "nos_version": "nutanix_installer_package-release-fraser-6.7.1-stable-104e6662e8b936a9225379d2d68efd93b5448289-x86_64.tar.gz"
+  }
+  
