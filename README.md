@@ -11,10 +11,9 @@ The following modules need to be installed on the host which the ansible script 
 ## How to use 
 
 To run this script type:
-ansible-playbook *PATH/TO/script name*.yml
 
-    you can type -v for verbose levels
-    it goes up to -vvvvv which is the maximum verbose level
+
+    ansible-playbook *PATH/TO/script name*.yml
 
 In the vars.json file you will need to adjust the IP's according to your configuration
 
