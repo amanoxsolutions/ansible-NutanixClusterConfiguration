@@ -1,0 +1,83 @@
+---
+- name: Image nodes
+  hosts: localhost
+  gather_facts: false
+  collections:
+    - grdavies.nutanix
+    - nutanix.ncp
+  vars_files: 
+    - vault.yml
+
+  tasks:
+  - name: Read configuration
+    set_fact:
+        config: "{{ lookup('file', 'group_vars/dev/vars.json') }}"
+
+  - name: Image nodes using manual and discovery modes. Create cluster
+    ntnx_foundation:
+      timeout: 4500
+      nutanix_host: "{{ config.foundation.ip }}"
+      cvm_gateway: "{{ config.cvm.gateway }}"
+      cvm_netmask: "{{ config.cvm.netmask }}"
+      hypervisor_gateway: "{{ config.hyp.gateway }}"
+      hypervisor_netmask: "{{ config.hyp.netmask }}"
+      default_ipmi_user: "{{ config.ipmi_user }}"
+      nos_package: "{{ config.nos_version }}"
+      blocks:
+      - block_id: "{{ config.block.serial1 }}"
+        nodes:
+            - manual_mode:
+                cvm_ip: "{{ config.cvm.node1 }}"
+                cvm_gb_ram: 40
+                hypervisor_hostname: "ntnx-ahv1"
+                ipmi_netmask: "{{ config.ipmi.netmask }}"
+                ipmi_gateway: "{{ config.ipmi.gateway }}"
+                ipmi_ip: "{{ config.ipmi.node1 }}"
+                ipmi_password: "{{ config.node.serial1 }}"
+                hypervisor: "kvm"
+                hypervisor_ip: "{{ config.hyp.node1 }}"
+                node_position: "A"
+
+      - block_id: "{{ config.block.serial2 }}"
+        nodes:
+            - manual_mode:
+                cvm_ip: "{{ config.cvm.node2 }}"
+                cvm_gb_ram: 40
+                hypervisor_hostname: "ntnx-ahv2"
+                ipmi_netmask: "{{ config.ipmi.netmask }}"
+                ipmi_gateway: "{{ config.ipmi.gateway }}"
+                ipmi_ip: "{{ config.ipmi.node2 }}"
+                ipmi_password: "{{ config.node.serial2 }}"
+                hypervisor: "kvm"
+                hypervisor_ip: "{{ config.hyp.node2 }}"
+                node_position: "A"
+
+      - block_id: "{{ config.block.serial3 }}"
+        nodes:
+            - manual_mode:
+                cvm_ip: "{{ config.cvm.node3 }}"
+                cvm_gb_ram: 40
+                hypervisor_hostname: "ntnx-ahv3"
+                ipmi_netmask: "{{ config.ipmi.netmask }}"
+                ipmi_gateway: "{{ config.ipmi.gateway }}"
+                ipmi_ip: "{{ config.ipmi.node3 }}"
+                ipmi_password: "{{ config.node.serial3 }}"
+                hypervisor: "kvm"
+                hypervisor_ip: "{{ config.hyp.node3 }}"
+                node_position: "A"
+
+      clusters:
+          - redundancy_factor: 2
+            cluster_members: 
+              - "{{ config.cvm.node1 }}"
+              - "{{ config.cvm.node2 }}"
+              - "{{ config.cvm.node3 }}"
+            name: "clu-A"
+    register: output
+
+  - debug:
+      msg: '{{ output }}'
+
+...
+      
+       
