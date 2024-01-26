@@ -1,0 +1,63 @@
+---
+#wtf
+- name: Configure IPMI
+  hosts: localhost
+  gather_facts: false
+  collections:
+    - nutanix.ncp
+  vars_files: 
+    - /Users/adhavanganapathipillai/Documents/amanox/workspaces/ansible/ntnx-setup/group_vars/vars.yml
+    - /Users/adhavanganapathipillai/Documents/amanox/workspaces/ansible/ntnx-setup/host_vars/host.yml
+    - /Users/adhavanganapathipillai/Documents/amanox/workspaces/ansible/ntnx-setup/vault.yml
+
+  tasks:
+
+  - name: Read configuration
+    set_fact:
+        config: "{{ lookup('file', 'group_vars/dev/vars.json') }}"
+
+  - name: configure ipmi node1
+    # check_mode: yes
+    ntnx_foundation_bmc_ipmi_config:
+      nutanix_host: "{{ config.foundation.ip }}"
+      ipmi_user: "{{ config.ipmi_user }}"
+      ipmi_password: "{{ config.node.serial1 }}"
+      ipmi_netmask: "{{ config.ipmi.netmask }}"
+      ipmi_gateway: "{{ config.ipmi.gateway }}"
+      blocks:
+          - nodes:
+              - ipmi_mac: "{{ config.mac.node1 }}"
+                ipmi_ip: "{{ config.ipmi.node1 }}"
+    register: output
+
+  - name: configure ipmi node2
+    # check_mode: yes
+    ntnx_foundation_bmc_ipmi_config:
+      nutanix_host: "{{ config.foundation.ip }}"
+      ipmi_user: "{{ config.ipmi_user }}"
+      ipmi_password: "{{ config.node.serial2}}"
+      ipmi_netmask: "{{ config.ipmi.netmask }}"
+      ipmi_gateway: "{{ config.ipmi.gateway }}"
+      blocks:
+          - nodes:
+              - ipmi_mac: "{{ config.mac.node2 }}"
+                ipmi_ip: "{{ config.ipmi.node2 }}"
+    register: output
+
+  - name: configure ipmi node3
+    # check_mode: yes
+    ntnx_foundation_bmc_ipmi_config:
+      nutanix_host: "{{ config.foundation.ip }}"
+      ipmi_user: "{{ config.ipmi_user }}"
+      ipmi_password: "{{ config.node.serial3 }}"
+      ipmi_netmask: "{{ config.ipmi.netmask }}"
+      ipmi_gateway: "{{ config.ipmi.gateway }}"
+      blocks:
+          - nodes:
+              - ipmi_mac: "{{ config.mac.node3 }}"
+                ipmi_ip: "{{ config.ipmi.node3 }}"
+    register: output
+
+  - debug:
+      msg: '{{ output }}'
+...
