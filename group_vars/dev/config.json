@@ -1,4 +1,14 @@
 {
+	"clusterinformation": {
+		"cluster_external_data_services_address": {
+			"ipv4": "1.1.1.1"
+		},
+		"cluster_external_address": [
+			{
+				"ipv4": "1.1.1.2"
+			}
+		]
+	},
 	"dns": {
 		"value": "8.8.8.8"
 	},
@@ -22,7 +32,7 @@
 			"vlan_id": "2104"
 		}
 	],
-        "smtp": {
+    "smtp": {
 		"server_address": "smtp.server.ch",
 		"port": "25", 
 		"username": null,
@@ -44,16 +54,6 @@
 		"num_host_failures_to_tolerate": 1,
 		"reservation_type": "ReserveSegments",
 		"ha_state": "HighlyAvailable"
-	},
-	"dataservice": {
-		"cluster_external_data_services_address": {
-			"ipv4": "1.1.1.1"
-		},
-		"cluster_external_address": [
-			{
-				"ipv4": "1.1.1.2"
-			}
-		]
-	},
+	}
 }
 
