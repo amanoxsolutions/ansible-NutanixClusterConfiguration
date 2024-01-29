@@ -31,7 +31,11 @@ the following steps are automated in ansible:
 - add alert configuration 
 - configure HA
 
-To add customer values, modify only the JSON file `templates/config.json` with the values from the Config Sheet.
+To add customer values, modify only the JSON file `group_vars/dev/config.json` with the values from the Config Sheet. To run the the automated cluster configuration, you need to enter the following command in the folder tasks:
+ 
+```bash
+ansible-playbook cluster-config.yml
+```
 
 ## Helpful sources
 - official Github Repo from Nutanix Ansible: https://github.com/nutanix/nutanix.ansible/tree/main
