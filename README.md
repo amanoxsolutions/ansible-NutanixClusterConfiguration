@@ -9,8 +9,13 @@ Development and testing were done within Ubuntu WSL 20.04.6 LTS on a local noteb
 - `nutanix.ncp`
 
 ## Staging
-
-To stage the cluster, fill up the JSON file in `group_vars/dev/vars-staging.json` with the correct data. Then, run the YAML file `tasks/image_nodes_manual.yml` with the following command:
+the following steps are automated in ansible:
+- add nodes
+- define IP range of Host, CVM and IPMI
+- define IP for Host, CVM and IPMI
+- cluster formation
+  
+To stage the cluster, modify only the JSON file in `group_vars/dev/vars-staging.json` with the correct values. To run the automated cluster staging, you need to enter following command:
 
 ```bash
 ansible-playbook image_nodes_manual.yml
