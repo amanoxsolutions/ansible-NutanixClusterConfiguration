@@ -15,7 +15,7 @@ the following steps are automated in ansible:
 - define IP for Host, CVM and IPMI
 - cluster formation
   
-To stage the cluster, modify only the JSON file in `group_vars/dev/vars-staging.json` with the correct values. To run the automated cluster staging, you need to enter following command:
+To stage the cluster, modify only the JSON file in `group_vars/dev/vars-staging.json` with the correct values. To run the automated cluster staging, you need to enter following command in the folder tasks:
 
 ```bash
 ansible-playbook image_nodes_manual.yml
@@ -49,7 +49,7 @@ the following steps are automated in ansible:
 To modify the IPMI configuration, modify only the JSON file in  `group_vars/dev/vars-staging.json` with the values from the config sheet. To run the automated IPMI configuration, you need to enter the following command in the folder tasks:
 
 ```bash
-ansible-playbook ipmi-config.yml
+ansible-playbook ipmi_config.yml
 ```
 
 ## Helpful sources
