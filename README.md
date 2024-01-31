@@ -4,11 +4,20 @@ This Git repository contains the Ansible script to stage and configure a Nutanix
 
 ## Prerequisites
 
-Development and testing were done within Ubuntu WSL 20.04.6 LTS on a local notebook. Followed this guide to install the environment correctly: [Installing Ansible on Ubuntu WSL](https://www.thomaspreischl.de/ansible-wsl-windows/). Test if the Ubuntu WSL can ping the Nutanix Cluster or any element in the IP Range. If you are working with Ansible for the first time, review this guide to get familiar with Ansible: [Getting Started with the Nutanix Ansible Module](https://www.nutanix.dev/2022/08/05/getting-started-with-the-nutanix-ansible-module/). The following modules need to be installed on the host where the Ansible script is running from:
+Development and testing were done within Ubuntu WSL 20.04.6 LTS on a local notebook. Followed this guide to install the environment correctly: [Installing Ansible on Ubuntu WSL](https://www.thomaspreischl.de/ansible-wsl-windows/). Test if the Ubuntu WSL can ping the Nutanix Cluster or any element in the IP Range. If you are working with Ansible for the first time, review this guide to get familiar with Ansible: [Getting Started with the Nutanix Ansible Module](https://www.nutanix.dev/2022/08/05/getting-started-with-the-nutanix-ansible-module/). 
+
+### MacOS installation
+
+Follow this guide for further instructions: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+
+### Collections
+
+The following modules need to be installed on the host where the Ansible script is running from:
 - `gradvies.nutanix`
 - `nutanix.ncp`
 
 ## Staging
+
 the following steps are automated in ansible:
 - add nodes
 - define IP range of Host, CVM and IPMI
@@ -43,6 +52,7 @@ ansible-playbook cluster-config.yml
 
 ```
 ## IPMI Configuration
+
 the following steps are automated in ansible:
 - change IPMI IP address
   
@@ -53,6 +63,7 @@ ansible-playbook ipmi_config.yml
 ```
 
 ## Helpful sources
+
 - official Github Repo from Nutanix Ansible: https://github.com/nutanix/nutanix.ansible/tree/main
 - First try with Ansible on Nutanix: https://www.nutanix.dev/2022/08/05/getting-started-with-the-nutanix-ansible-module/
 - Gitrepo from AD-Code with some automated Ansible Scripts: https://github.com/AD-Code/Automation/tree/master/ansible/nutanix_cluster_baseline
