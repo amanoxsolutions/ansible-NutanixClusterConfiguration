@@ -55,6 +55,8 @@ ansible-playbook cluster-config.yml
 
 the following steps are automated in ansible:
 - change IPMI IP address
+- add IPMI Gateway
+- add IPMI Netmask
   
 To modify the IPMI configuration, modify only the JSON file in  `group_vars/dev/vars-staging.json` with the values from the config sheet. To run the automated IPMI configuration, you need to enter the following command in the folder tasks:
 
