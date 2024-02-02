@@ -8,67 +8,39 @@
     set_fact:
         config: "{{ lookup('file', '../config_vars/config.json') }}"
 
-  - name: add cluster and data services IP
-    uri:
-        url: "{{ nutanix_url }}/cluster"
-        user: "{{ vault_pe_username }}"
-        password: "{{ vault_pe_password }}"
-        method: PATCH
-        body: "{{ config.clusterinformation }}"
-        force_basic_auth: yes
-        validate_certs: no
-        body_format: json
-        status_code: 200, 201
-        headers:
-                Content-Type: application/json
-        return_content: yes
-    register: add_data_services_ip
+  - name: add cluster
+    include_role:
+      name: helpers/nutanix_api
+    vars:
+      resource: cluster
+      method: PATCH
+      body: "{{ config.clusterinformation }}"
+      status_code: 200, 201
     
   - name: add DNS
-    uri:
-        url: "{{ nutanix_url }}/cluster/name_servers"
-        user: "{{ vault_pe_username }}"
-        password: "{{ vault_pe_password }}"
-        method: POST
-        body: "{{ config.dns }}"
-        force_basic_auth: yes
-        validate_certs: no
-        body_format: json
-        status_code: 200, 201
-        headers:
-                Content-Type: application/json
-        return_content: yes
-    register: cluster_dns
+    include_role:
+      name: helpers/nutanix_api
+    vars:
+      resource: cluster/name_servers
+      method: POST
+      body: "{{ config.dns }}"
+      status_code: 200, 201
 
   - name: add NTP
-    uri:
-      url: "{{ nutanix_url }}/cluster/ntp_servers"
-      user: "{{ vault_pe_username }}"
-      password: "{{ vault_pe_password }}"
+    include_role:
+      name: helpers/nutanix_api
+    vars:
+      resource: cluster/ntp_servers
       method: POST
       body: "{{ config.ntp }}"
-      force_basic_auth: yes
-      validate_certs: no
-      body_format: json
       status_code: 200, 201
-      headers:
-        Content-Type: application/json
-      return_content: yes
-    register: cluster_ntp
 
   - name: get storage container
-    uri:
-      url: "{{ nutanix_url }}/storage_containers"
-      user: "{{ vault_pe_username }}"
-      password: "{{ vault_pe_password }}"
-      method: GET
-      force_basic_auth: yes
-      validate_certs: no
-      body_format: json
-      headers:
-        Content-Type: application/json
-      return_content: yes
-    register: cluster_storage_containers
+    include_role:
+      name: helpers/nutanix_api
+    vars:
+      resource: storage_containers
+      result_fact: cluster_storage_containers
 
   - name: Store UUIDs for storage containers with vstore_name_list starting with 'default'
     set_fact:

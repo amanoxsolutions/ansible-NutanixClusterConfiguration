@@ -1,0 +1,24 @@
+- name: perform nutanix api call
+  uri:
+    url: "{{ nutanix_url }}/{{ resource }}"
+    
+    user: "{{ vault_pe_username }}"
+    password: "{{ vault_pe_password }}"
+    force_basic_auth: yes
+    
+    method: "{{ method }}"
+    body: "{{ body }}"
+    body_format: json
+    headers: "{{ headers }}"
+    
+    validate_certs: no
+    
+    status_code: "{{ status_code }}"
+    
+    return_content: yes
+  register: nutanix_api_response
+
+- name: set fact for nutanix api response
+  set_fact:
+    "{{ result_fact }}": "{{ nutanix_api_response }}"
+  ignore_errors: true

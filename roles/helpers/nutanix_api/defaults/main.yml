@@ -1,0 +1,4 @@
+headers:
+  Content-Type: application/json
+method: "GET"
+result_fact: "nutanix_api_response"
