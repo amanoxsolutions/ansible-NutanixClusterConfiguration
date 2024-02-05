@@ -59,18 +59,18 @@
 
   - name: create storage container
     uri:
-        url: "{{ nutanix_url }}/storage_containers"
-        user: "{{ vault_pe_username }}"
-        password: "{{ vault_pe_password }}"
-        method: POST
-        body: "{{ config.storagecontainer }}"
-        force_basic_auth: yes
-        validate_certs: no
-        body_format: json
-        status_code: 200, 201
-        headers:
-                Content-Type: application/json
-        return_content: yes
+      url: "{{ nutanix_url }}/storage_containers"
+      user: "{{ vault_pe_username }}"
+      password: "{{ vault_pe_password }}"
+      method: POST
+      body: "{{ config.storagecontainer }}"
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+      status_code: 200, 201
+      headers:
+        Content-Type: application/json
+      return_content: yes
     register: storage_container
 
   - name: get storage pools
@@ -89,22 +89,22 @@
 
   - name: store storage pool UUID
     set_fact:
-            default_storage_pool_uuid: "{{ cluster_storage_pools.json.entities[0].storagePoolUuid }}"
+      default_storage_pool_uuid: "{{ cluster_storage_pools.json.entities[0].storagePoolUuid }}"
 
   - name: update storage pool
     uri:
-        url: "{{ nutanix_urlv1 }}/storage_pools"
-        user: "{{ vault_pe_username }}"
-        password: "{{ vault_pe_password }}"
-        method: PATCH
-        body: '{"storagePoolUuid": "{{ default_storage_pool_uuid }}", "name": "sp01"}'
-        force_basic_auth: yes
-        validate_certs: no
-        body_format: json
-        status_code: 200, 201
-        headers:
-                Content-Type: application/json
-        return_content: yes
+      url: "{{ nutanix_urlv1 }}/storage_pools"
+      user: "{{ vault_pe_username }}"
+      password: "{{ vault_pe_password }}"
+      method: PATCH
+      body: '{"storagePoolUuid": "{{ default_storage_pool_uuid }}", "name": "sp01"}'
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+      status_code: 200, 201
+      headers:
+        Content-Type: application/json
+      return_content: yes
     register: storage_pool
     
   - name: add VLANs
@@ -126,48 +126,48 @@
 
   - name: add SMTP
     uri:
-        url: "{{ nutanix_url }}/cluster/smtp"
-        user: "{{ vault_pe_username }}"
-        password: "{{ vault_pe_password }}"
-        method: PATCH
-        body: "{{ config.smtp }}"
-        force_basic_auth: yes
-        validate_certs: no
-        body_format: json
-        status_code: 200, 201
-        headers:
-                Content-Type: application/json
-        return_content: yes
+      url: "{{ nutanix_url }}/cluster/smtp"
+      user: "{{ vault_pe_username }}"
+      password: "{{ vault_pe_password }}"
+      method: PATCH
+      body: "{{ config.smtp }}"
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+      status_code: 200, 201
+      headers:
+        Content-Type: application/json
+      return_content: yes
     register: add_smtp
 
   - name: add alert configuration
     uri:
-        url: "{{ nutanix_url }}/alerts/configuration"
-        user: "{{ vault_pe_username }}"
-        password: "{{ vault_pe_password }}"
-        method: PUT
-        body: "{{ config.alert }}"
-        force_basic_auth: yes
-        validate_certs: no
-        body_format: json
-        status_code: 200, 201
-        headers:
-                Content-Type: application/json
-        return_content: yes
+      url: "{{ nutanix_url }}/alerts/configuration"
+      user: "{{ vault_pe_username }}"
+      password: "{{ vault_pe_password }}"
+      method: PUT
+      body: "{{ config.alert }}"
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+      status_code: 200, 201
+      headers:
+        Content-Type: application/json
+      return_content: yes
     register: add_alert_configuration
 
   - name: configure HA
     uri:
-        url: "{{ nutanix_url }}/ha"
-        user: "{{ vault_pe_username }}"
-        password: "{{ vault_pe_password }}"
-        method: PUT
-        body: "{{ config.ha }}"
-        force_basic_auth: yes
-        validate_certs: no
-        body_format: json
-        status_code: 200, 201
-        headers:
-                Content-Type: application/json
-        return_content: yes
+      url: "{{ nutanix_url }}/ha"
+      user: "{{ vault_pe_username }}"
+      password: "{{ vault_pe_password }}"
+      method: PUT
+      body: "{{ config.ha }}"
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+      status_code: 200, 201
+      headers:
+        Content-Type: application/json
+      return_content: yes
     register: configure_ha
