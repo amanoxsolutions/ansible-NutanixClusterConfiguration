@@ -1,0 +1,79 @@
+---
+- name: Install Prism Central VM on AHV
+  hosts: localhost
+  gather_facts: no
+  collections:
+    - grdavies.nutanix
+    - nutanix.ncp
+  vars_files: 
+    - vault.yml
+
+  tasks:
+    - name: Read configuration
+      set_fact:
+        config: "{{ lookup('file', '/Users/adhavanganapathipillai/Documents/amanox/workspaces/ansible/ntnx-setup/group_vars/dev/vars.json') }}"
+    - name: Upload Prism Central Disk Images
+      ntnx_images:
+        cluster_name: "{{ cluster_name }}"
+        container_name: "{{ container_name }}"
+        image_type: disk
+        image_name: "{{ item.name }}"
+        image_url: "{{ item.url }}"
+      with_items:
+        - { name: "pc-boot.qcow2", url: "file:///Users/adhavanganapathipillai/Documents/amanox/workspaces/ansible/ntnx-setup/files/pc.2022.6.0.10-install/boot.qcow2" }
+        - { name: "pc-data.qcow2", url: "file:///Users/adhavanganapathipillai/Documents/amanox/workspaces/ansible/ntnx-setup/files/pc.2022.6.0.10-install/data.qcow2" }
+        - { name: "pc-home.qcow2", url: "file:///Users/adhavanganapathipillai/Documents/amanox/workspaces/ansible/ntnx-setup/files/pc.2022.6.0.10-install/home.qcow2" }
+
+    - name: Create VM from Images
+      ntnx_vms:
+        cluster_uuid: "{{ cluster_uuid }}"
+        name: "Prism-Central"
+        num_vcpus: 6
+        memory_mb: 26624
+        timezone: "UTC"
+        disks:
+          - image_name: "pc-boot.qcow2"
+            size_gb: 100
+          - image_name: "pc-data.qcow2"
+            size_gb: 1000
+          - image_name: "pc-home.qcow2"
+            size_gb: 100
+      register: pc_vm_info
+
+    - name: Power On VM
+      ntnx_vms:
+        cluster_uuid: "{{ cluster_uuid }}"
+        vm_uuid: "{{ pc_vm_info.uuid }}"
+        state: on
+
+    - name: Assign Static IP Address
+      shell: |
+        sudo sed -i 's/^BOOTPROTO=.*/BOOTPROTO=none/' /etc/sysconfig/network-scripts/ifcfg-eth0
+        sudo tee -a /etc/sysconfig/network-scripts/ifcfg-eth0 > /dev/null <<EOF
+        IPADDR=<your_static_ip>
+        NETMASK=<your_netmask>
+        GATEWAY=<your_gateway>
+        EOF
+      args:
+        executable: /bin/bash
+
+    - name: Restart Prism Central VM
+      shell: sudo reboot
+
+    - name: Wait for VM to Restart
+      wait_for:
+        host: "{{ hostvars['localhost']['ansible_host'] }}"
+        port: 22
+        state: started
+        delay: 30
+        timeout: 600
+
+    - name: Create Cluster
+      shell: |
+        acli -h localhost -y cluster --cluster_function_list="multicluster" -s <your_static_ip> create
+
+    - name: Update VM Description
+      ntnx_vms:
+        cluster_uuid: "{{ cluster_uuid }}"
+        vm_uuid: "{{ pc_vm_info.uuid }}"
+        description: "NutanixPrismCentral"
