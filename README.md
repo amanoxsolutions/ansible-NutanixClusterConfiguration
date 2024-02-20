@@ -63,6 +63,29 @@ To modify the IPMI configuration, modify only the JSON file in  `group_vars/dev/
 ```bash
 ansible-playbook ipmi_config.yml
 ```
+## Deploy Prism Central
+
+the following steps are automated in ansible:
+- create PCVM
+- configure PCVM
+- deploy Prism Central
+
+To modify the Prism Central configuration, modify only the JSON file in  `group_vars/dev/vars-staging.json` with the values from the config sheet, you need to enter the following command in the folder tasks:
+
+```bash
+ansible-playbook deploy_pc.yml
+```
+
+## Cluster Hardening script
+
+the following steps are automated in ansible:
+- Cluster hardening
+
+To modify the cluster hardening, modify only the JSON file in  `group_vars/dev/vars-staging.json` with the values from the config sheet, you need to enter the following command in the folder tasks:
+
+```bash
+ansible-playbook hardening.yml
+```
 
 ## Helpful sources
 
