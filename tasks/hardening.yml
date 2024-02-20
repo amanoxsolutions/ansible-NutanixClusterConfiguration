@@ -1,0 +1,43 @@
+---
+- name: Nutanix Cluster hardening
+  hosts: CVM
+  gather_facts: false
+
+  tasks: 
+  - name: configure SCMA policy
+    ansible.builtin.shell: ncli cluster get-hypervisor-security-config
+  
+  - name: enable AIDE to run weekly
+    ansible.builtin.shell: ncli cluster edit-hypervisor-security-params enable-aide=true
+
+  - name: enable highstrength PW
+    ansible.builtin.shell: ncli cluster edit-hypervisor-security-params \
+                           enable-high-strength-password=true 
+
+  - name: enable defense knowledge consent banner of US departement
+    ansible.builtin.shell: ncli cluster edit-hypervisor-security-params enable-banner=true
+
+  - name: configure SCMA policy to run hourly
+    ansible.builtin.shell: ncli cluster edit-hypervisor-security-params schedule=hourly
+
+  - name: enable AHV generate stack traces for cluster issues
+    ansible.builtin.shell: ncli cluster edit-hypervisor-security-params enable-core=true
+
+  - name: configuring security level for SSH
+    ansible.builtin.shell: ncli cluster edit-cvm-security-params ssh-security-level=limited
+
+  - name: locking security configuration
+    ansible.builtin.shell: ncli cluster edit-cvm-security-params enable-lock-status=true
+
+  - name: enable iTLB Mutlihit Mitigation
+    ansible.builtin.shell: ncli cluster edit-cvm-security-params enable-itlb-multihit-mitigation=true
+  
+  - name: backing up the DoD banner file
+    ansible.builtin.shell: cp -a /etc/puppet/modules/kvm/files/issue.DoD \
+                           /etc/puppet/modules/kvm/files/issue.DoD.bak
+
+  - name: modify DoD banner file
+    ansible.builtin.shell: vi /etc/issue.DoD
+
+  - name: setting the banner for all nodes
+    ansible.builtin.shell: ncli cluster edit-hypervisor-security-params enable-banner=true
