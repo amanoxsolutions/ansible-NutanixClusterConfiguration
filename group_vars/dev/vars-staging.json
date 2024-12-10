@@ -39,7 +39,7 @@
       "node3": "XX:XX:XX:XX:XX:XX"
     },
     "pe_ip": "10.XX.XX.XX",
-    "nutanix_url": "https://10.10.88.50:9440/PrismGateway/services/rest/v2.0",
+    "nutanix_url": "https://10.xx.xx.xx:9440/PrismGateway/services/rest/v2.0",
     "vault_pe_user": "api_user",
     "ipmi_user": "ADMIN",
     "nos_version": "nutanix_installer_package-release-fraser-6.7.1-stable-104e6662e8b936a9225379d2d68efd93b5448289-x86_64.tar.gz"
